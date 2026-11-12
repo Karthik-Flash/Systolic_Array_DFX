@@ -1,4 +1,5 @@
 # T1 Complete Guide
+
 ## Swapping Hardware While It Runs: Dynamic Function eXchange on the ZedBoard
 
 **Project:** Precision-scalable systolic matrix multiplier (Reconfigurable Computing, CS G553, BITS Hyderabad)
@@ -36,20 +37,20 @@ Companion documents: [T1_RESULTS.md](T1_RESULTS.md) (every number, with its sour
 
 T1 proves that DFX works on this board, with this toolchain, without the ARM processor, over a single USB cable. We carved out one rectangle of the chip, the **reconfigurable partition** `U_RP`. We built three things that can live in it: an adder (`rm_add`), a multiplier (`rm_mul`) and an empty "greybox". Then we swapped between them at runtime. A seconds counter in the rest of the chip (`vio_uptime`) kept counting straight through every swap. That counter is the proof: if the swap had secretly reprogrammed the whole chip, the counter would have restarted at zero, as it does when we load the full bitstream on purpose.
 
-| What | Result | Source |
-|---|---|---|
-| Partial swap time over JTAG | **1,424 ± 27 ms** (N = 15) | `reports/hw_selftest_20261008_160232.csv` |
-| Full program time over JTAG | **9,060 ± 73 ms** (N = 3) | same CSV |
-| Partial bitstream size | **585,560 B = 14.5%** of the full 4,045,667 B | `bitstreams/t1/manifest.csv` |
-| Swaps with static logic uninterrupted | **15 / 15** (uptime +2 s across every one) | self-test CSV |
-| Full programs that reset uptime | 2 / 2 measurable (rows 2–3) | self-test CSV |
-| Correct `rm_id` and all 7 test vectors after every swap | 18 / 18 self-test rows PASS | self-test CSV |
-| Timing at 100 MHz, `cfg_add` | WNS **+4.304 ns**, WHS +0.039 ns | `reports/cfg_add_timing_summary.rpt` |
-| Timing at 100 MHz, `cfg_mul` | WNS **+3.501 ns**, WHS +0.039 ns | `reports/cfg_mul_timing_summary.rpt` |
-| Timing at 100 MHz, `cfg_grey` | WNS **+4.304 ns**, WHS +0.039 ns | `reports/cfg_grey_timing_summary.rpt` |
-| `pr_verify` (all three share one static) | **PASS** | `reports/pr_verify.rpt` |
-| Pblock capacity | 4,400 LUT / 8,800 FF / **40 DSP** / 10 BRAM | `reports/cfg_*_utilization_pblock.rpt` |
-| Static region cost | 636 LUT / 1,412 FF / 0 DSP (≈ 97% of the LUTs are debug cores) | `reports/cfg_grey_utilization*.rpt` |
+| What                                                      | Result                                                          | Source                                      |
+| --------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------- |
+| Partial swap time over JTAG                               | **1,424 ± 27 ms** (N = 15)                               | `reports/hw_selftest_20261008_160232.csv` |
+| Full program time over JTAG                               | **9,060 ± 73 ms** (N = 3)                                | same CSV                                    |
+| Partial bitstream size                                    | **585,560 B = 14.5%** of the full 4,045,667 B             | `bitstreams/t1/manifest.csv`              |
+| Swaps with static logic uninterrupted                     | **15 / 15** (uptime +2 s across every one)                | self-test CSV                               |
+| Full programs that reset uptime                           | 2 / 2 measurable (rows 2–3)                                    | self-test CSV                               |
+| Correct `rm_id` and all 7 test vectors after every swap | 18 / 18 self-test rows PASS                                     | self-test CSV                               |
+| Timing at 100 MHz, `cfg_add`                            | WNS **+4.304 ns**, WHS +0.039 ns                          | `reports/cfg_add_timing_summary.rpt`      |
+| Timing at 100 MHz, `cfg_mul`                            | WNS **+3.501 ns**, WHS +0.039 ns                          | `reports/cfg_mul_timing_summary.rpt`      |
+| Timing at 100 MHz, `cfg_grey`                           | WNS **+4.304 ns**, WHS +0.039 ns                          | `reports/cfg_grey_timing_summary.rpt`     |
+| `pr_verify` (all three share one static)                | **PASS**                                                  | `reports/pr_verify.rpt`                   |
+| Pblock capacity                                           | 4,400 LUT / 8,800 FF / **40 DSP** / 10 BRAM               | `reports/cfg_*_utilization_pblock.rpt`    |
+| Static region cost                                        | 636 LUT / 1,412 FF / 0 DSP (≈ 97% of the LUTs are debug cores) | `reports/cfg_grey_utilization*.rpt`       |
 
 The one-sentence conclusion: **a swap takes about 1.4 s over JTAG, the time depends only on the size of the rectangle and not on what is inside it, and the rest of the chip never notices.**
 
@@ -61,18 +62,19 @@ The [T0 guide](../t0/T0_Complete_Guide.md) explains all of this in depth (Sectio
 
 An **FPGA** (Field-Programmable Gate Array) is a chip full of small, generic building blocks and a programmable wiring network. A configuration file, the **bitstream**, decides what each block does and how they are wired. Load a different bitstream and the same chip becomes a different circuit.
 
-| Block | What it is | xc7z020 has |
-|---|---|---|
-| **LUT** (look-up table) | a 6-input truth table: any small logic function | 53,200 |
-| **FF** (flip-flop) | a 1-bit register that updates on the clock edge | 106,400 |
-| **CARRY4** | a fast carry chain for adders and counters | — |
-| **DSP48E1** | a hard 25×18 multiplier with a 48-bit adder/accumulator | 220 |
-| **BRAM** (block RAM) | 36 Kb memory block | 140 |
-| **BUFG** | global clock buffer driving a low-skew clock network | 32 |
+| Block                         | What it is                                               | xc7z020 has |
+| ----------------------------- | -------------------------------------------------------- | ----------- |
+| **LUT** (look-up table) | a 6-input truth table: any small logic function          | 53,200      |
+| **FF** (flip-flop)      | a 1-bit register that updates on the clock edge          | 106,400     |
+| **CARRY4**              | a fast carry chain for adders and counters               | —          |
+| **DSP48E1**             | a hard 25×18 multiplier with a 48-bit adder/accumulator | 220         |
+| **BRAM** (block RAM)    | 36 Kb memory block                                       | 140         |
+| **BUFG**                | global clock buffer driving a low-skew clock network     | 32          |
 
 The Zynq is two chips in one package: the **PS** (Processing System: two ARM cores, DDR controller, peripherals) and the **PL** (Programmable Logic: the FPGA fabric). This project is **PL-only**: the ARM side is never configured or used.
 
 Because of that, the laptop talks to the design over **JTAG** (a 4-wire test and programming interface, reached through the board's USB "PROG" port, J17). The same cable carries two kinds of traffic:
+
 - **bitstreams**, sent by Vivado's Hardware Manager to configure the chip;
 - **VIO** traffic. VIO (Virtual Input/Output) is a Xilinx debug core inside our design. It gives the laptop virtual switches (outputs into the design) and virtual displays (inputs from the design).
 
@@ -106,6 +108,7 @@ That last detail matters for DFX. Each column of the die is divided vertically i
 ### 3.3 The configuration engine and the JTAG path
 
 The chip contains dedicated **configuration logic**: a small state machine that receives a bitstream, checks it, and writes frames to the addresses the bitstream specifies. It can be fed through several ports:
+
 - external pins (from flash at boot);
 - **JTAG**, which we use;
 - **ICAP** (Internal Configuration Access Port), a primitive the fabric itself can drive;
@@ -139,6 +142,7 @@ A **partial bitstream** skips the clear. It writes only the frames inside one re
 ### 4.1 The analogy
 
 Think of renovating one room of a house while everyone else stays home. You must:
+
 - **wall off the room** (a fixed boundary, so the builders don't wander into the kitchen);
 - **keep the doorways in the same places** (the rest of the house still expects the door where it was);
 - **switch off the room's sockets while you work** (so nothing plugged in from outside gets a shock);
@@ -149,21 +153,21 @@ Every item has a precise DFX counterpart.
 
 ### 4.2 The precise version
 
-| DFX term | Meaning | T1 name |
-|---|---|---|
-| **Static region** | All logic that is never reconfigured and keeps running during a swap | everything in `top_dfx` except `U_RP`: VIO, reset sync, uptime/heartbeat, decoupler, LED drivers, clock |
-| **Reconfigurable Partition (RP)** | A hierarchical instance whose contents can be swapped | instance `U_RP` of module `rp_t1` |
-| **Partition Definition (PD)** | Vivado's name for "the set of things that may live in this RP" | `pd_t1` |
-| **Reconfigurable Module (RM)** | One concrete implementation of the RP | `rm_add` (`rtl/t1/rm/rm_add.v`), `rm_mul` (`rtl/t1/rm/rm_mul.v`) |
-| **Greybox** | An empty RM generated by Vivado: outputs tied to constant 0, inputs terminated | the greybox option of `pd_t1` |
-| **Partition pins** | Fixed routing points where static wires meet RP wires; identical for every RM | 78 of them (`Total PPLOCs 78` in `reports/*_utilization_hier.rpt`) |
-| **Pblock** | A rectangle of the die the RP is confined to; its frames are what the partial rewrites | `pblock_U_RP` |
-| **Configuration** | One complete design: static + one choice per RP | `cfg_add`, `cfg_mul`, `cfg_grey` |
-| **Parent / child runs** | The parent implements static + the first RM and **locks** the static; children reuse the locked static with other RMs | parent `impl_1` (`cfg_add`); children `child_0_impl_1` (`cfg_mul`), `child_1_impl_1` (`cfg_grey`) |
-| **Full / partial bitstream** | Whole device / only the Pblock's frames | `t1_full_*.bit` / `t1_partial_*.bit` |
-| **`pr_verify`** | Vivado command that checks all configurations share an *identical* static region (placement and routing) | `reports/pr_verify.rpt`: PASS |
-| **Decoupling** | Static logic that isolates the RP's outputs while the RP is being rewritten | `dfx_decouple` (instance `U_DC`) + VIO `vio_decouple` |
-| **RESET_AFTER_RECONFIG** | Pblock property: after a partial load, the configuration logic resets all flip-flops inside the Pblock to their initial values | set to `true` on `pblock_U_RP` |
+| DFX term                                | Meaning                                                                                                                        | T1 name                                                                                                       |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| **Static region**                 | All logic that is never reconfigured and keeps running during a swap                                                           | everything in `top_dfx` except `U_RP`: VIO, reset sync, uptime/heartbeat, decoupler, LED drivers, clock   |
+| **Reconfigurable Partition (RP)** | A hierarchical instance whose contents can be swapped                                                                          | instance `U_RP` of module `rp_t1`                                                                         |
+| **Partition Definition (PD)**     | Vivado's name for "the set of things that may live in this RP"                                                                 | `pd_t1`                                                                                                     |
+| **Reconfigurable Module (RM)**    | One concrete implementation of the RP                                                                                          | `rm_add` (`rtl/t1/rm/rm_add.v`), `rm_mul` (`rtl/t1/rm/rm_mul.v`)                                      |
+| **Greybox**                       | An empty RM generated by Vivado: outputs tied to constant 0, inputs terminated                                                 | the greybox option of `pd_t1`                                                                               |
+| **Partition pins**                | Fixed routing points where static wires meet RP wires; identical for every RM                                                  | 78 of them (`Total PPLOCs 78` in `reports/*_utilization_hier.rpt`)                                        |
+| **Pblock**                        | A rectangle of the die the RP is confined to; its frames are what the partial rewrites                                         | `pblock_U_RP`                                                                                               |
+| **Configuration**                 | One complete design: static + one choice per RP                                                                                | `cfg_add`, `cfg_mul`, `cfg_grey`                                                                        |
+| **Parent / child runs**           | The parent implements static + the first RM and **locks** the static; children reuse the locked static with other RMs    | parent `impl_1` (`cfg_add`); children `child_0_impl_1` (`cfg_mul`), `child_1_impl_1` (`cfg_grey`) |
+| **Full / partial bitstream**      | Whole device / only the Pblock's frames                                                                                        | `t1_full_*.bit` / `t1_partial_*.bit`                                                                      |
+| **`pr_verify`**                 | Vivado command that checks all configurations share an *identical* static region (placement and routing)                     | `reports/pr_verify.rpt`: PASS                                                                               |
+| **Decoupling**                    | Static logic that isolates the RP's outputs while the RP is being rewritten                                                    | `dfx_decouple` (instance `U_DC`) + VIO `vio_decouple`                                                   |
+| **RESET_AFTER_RECONFIG**          | Pblock property: after a partial load, the configuration logic resets all flip-flops inside the Pblock to their initial values | set to `true` on `pblock_U_RP`                                                                            |
 
 The analogy mapped: the wall is the **Pblock**; the doorways are the **partition pins**; switching off the sockets is **decoupling**; checking against the plans is **`pr_verify`**; the clock on the kitchen wall is **`vio_uptime`**.
 
@@ -250,6 +254,7 @@ endmodule
 ```
 
 Why each choice:
+
 - **Inversion inside.** BTNC reads 1 when pressed; the design wants an active-low reset. T0 initially got this backwards and only ran while the button was held (T0 bug #8). Here, pressed = reset and released = run, so the board runs with no button touched.
 - **Two flops.** The button is asynchronous to the clock, and sampling it directly risks metastability. Two flops in series give the first one a full cycle to settle. `ASYNC_REG` tells Vivado to place them close together.
 - **Power-up behaviour.** Flops start at 0 after configuration, so `rst_n` is low for the first two cycles: a free power-on reset.
@@ -272,6 +277,7 @@ endmodule
 ```
 
 Why each choice:
+
 - **Registered.** The static side always sees a flop output, never a combinational path from a half-configured RP. This also cuts the timing path at the partition boundary.
 - **`rm_id = FF` while decoupled.** No RM ever reports `FF`, so reading `FF` over VIO unambiguously means "isolated", not "greybox" (`00`) or a loaded RM (`A1`/`B2`).
 - **Parameterised `W` and `SAFE`.** T2 reuses the module with a different width.
@@ -289,13 +295,13 @@ Decoupling *also* holds the RM in reset, so one VIO action does both. `vio_rm_rs
 
 **LED map.**
 
-| LED | Signal | Meaning |
-|---|---|---|
+| LED      | Signal                          | Meaning                                                                                 |
+| -------- | ------------------------------- | --------------------------------------------------------------------------------------- |
 | LD3..LD0 | `led_pat` after the decoupler | which RM is loaded (binary count = add, walking one = mul, dark = greybox or decoupled) |
-| LD4 | 0 | reserved |
-| LD5 | `vio_decouple` | RP isolated |
-| LD6 | `~rm_rst_n` | RM held in reset |
-| LD7 | `heartbeat` | static region alive (1 Hz) |
+| LD4      | 0                               | reserved                                                                                |
+| LD5      | `vio_decouple`                | RP isolated                                                                             |
+| LD6      | `~rm_rst_n`                   | RM held in reset                                                                        |
+| LD7      | `heartbeat`                   | static region alive (1 Hz)                                                              |
 
 ### 5.3 The RP interface
 
@@ -315,16 +321,17 @@ module rp_t1 #(
 
 Inputs 1 + 1 + 16 + 16 = 34, outputs 32 + 8 + 4 = 44, total **78 partition pins**. The datapath has the same shape as a T0 processing element (two signed 16-bit operands, a 32-bit result), so T1 also rehearses T2: one RM that needs a DSP and one that must not use one, both in the same Pblock.
 
-| | `rm_add` | `rm_mul` | greybox |
-|---|---|---|---|
-| `y` | `sext(a) + sext(b)` | `a × b` (signed 16×16 → 32) | 0 |
-| `rm_id` | `A1` | `B2` | `00` |
-| `led_pat` | 4-bit binary counter | walking one `0001 → 0010 → 0100 → 1000 → …` | `0000` |
-| DSP48E1 | 0 | 1 | 0 |
+|             | `rm_add`            | `rm_mul`                                         | greybox  |
+| ----------- | --------------------- | -------------------------------------------------- | -------- |
+| `y`       | `sext(a) + sext(b)` | `a × b` (signed 16×16 → 32)                   | 0        |
+| `rm_id`   | `A1`                | `B2`                                             | `00`   |
+| `led_pat` | 4-bit binary counter  | walking one `0001 → 0010 → 0100 → 1000 → …` | `0000` |
+| DSP48E1     | 0                     | 1                                                  | 0        |
 
 ### 5.4 Inside an RM
 
 `rm_id` comes from an 8-bit register marked `dont_touch`, reset to `00` and loaded with the RM's signature every cycle out of reset. Two reasons:
+
 - Every RP output pin is then driven by a real flop inside the RP, never by a constant. Vivado warns about constant-driven partition pins.
 - Reading `00` vs `A1`/`B2` shows the RM's reset release over VIO.
 
@@ -384,17 +391,18 @@ To widen a signed number from 16 to 32 bits without changing its value, copy the
 
 These are T1_PLAN §6.1. They were re-derived in Python before any RTL was written, and the same seven vectors run in the simulation benches and on silicon (`t1_check` in `scripts/t1/hw_t1.tcl`).
 
-| a (hex) | b (hex) | a, b | a + b | `rm_add` y | a × b | `rm_mul` y |
-|---|---|---|---|---|---|---|
-| 0003 | 0004 | 3, 4 | 7 | 0000_0007 | 12 | 0000_000C |
-| FFFD | 0004 | −3, 4 | 1 | 0000_0001 | −12 | FFFF_FFF4 |
-| 0007 | FFFA | 7, −6 | 1 | 0000_0001 | −42 | FFFF_FFD6 |
-| 7FFF | 7FFF | 32767, 32767 | 65,534 | 0000_FFFE | 1,073,676,289 | 3FFF_0001 |
-| 8000 | 8000 | −32768, −32768 | −65,536 | FFFF_0000 | 1,073,741,824 | 4000_0000 |
-| 8000 | 7FFF | −32768, 32767 | −1 | FFFF_FFFF | −1,073,709,056 | C000_8000 |
-| 0000 | 0000 | 0, 0 | 0 | 0000_0000 | 0 | 0000_0000 |
+| a (hex) | b (hex) | a, b             | a + b    | `rm_add` y | a × b          | `rm_mul` y |
+| ------- | ------- | ---------------- | -------- | ------------ | --------------- | ------------ |
+| 0003    | 0004    | 3, 4             | 7        | 0000_0007    | 12              | 0000_000C    |
+| FFFD    | 0004    | −3, 4           | 1        | 0000_0001    | −12            | FFFF_FFF4    |
+| 0007    | FFFA    | 7, −6           | 1        | 0000_0001    | −42            | FFFF_FFD6    |
+| 7FFF    | 7FFF    | 32767, 32767     | 65,534   | 0000_FFFE    | 1,073,676,289   | 3FFF_0001    |
+| 8000    | 8000    | −32768, −32768 | −65,536 | FFFF_0000    | 1,073,741,824   | 4000_0000    |
+| 8000    | 7FFF    | −32768, 32767   | −1      | FFFF_FFFF    | −1,073,709,056 | C000_8000    |
+| 0000    | 0000    | 0, 0             | 0        | 0000_0000    | 0               | 0000_0000    |
 
 Worked details:
+
 - **−3 + 4:** `0xFFFF_FFFD + 0x0000_0004 = 0x1_0000_0001`. The carry out of bit 31 falls off the 32-bit register, leaving `0x0000_0001` = 1. That dropped carry is how two's complement makes subtraction "just addition".
 - **−3 × 4 = −12:** a negative 32-bit value is stored as 2³² minus its magnitude. 2³² − 12 = 4,294,967,284 = `0xFFFF_FFF4`.
 - **7 × −6 = −42:** 2³² − 42 = `0x1_0000_0000 − 0x2A` = `0xFFFF_FFD6`.
@@ -445,10 +453,10 @@ T1 followed T0's rule: nothing reaches Vivado until it passes self-checking simu
 
 Four Icarus Verilog builds (`iverilog -g2005`), outputs in `sim/t1_build/`:
 
-| Bench | RM | Checks |
-|---|---|---|
-| `tb/t1/tb_rp_t1.v` | add, mul (`-DRM_ADD` / `-DRM_MUL`) | reset values; `rm_id` after release; all 7 vectors (1-cycle latency); LED pattern steps exactly every 2^PRESCALE_W cycles over 6 steps (`PRESCALE_W = 4` in sim) |
-| `tb/t1/tb_top_dfx.v` + `tb/t1/vio_dfx_stub.v` | add, mul | design runs with the button released; all vectors through the VIO stub (2-cycle latency: RM register + decoupler register); decouple → y 0, `rm_id` FF, LEDs; uptime ticks every 100 cycles **and keeps ticking while decoupled**; heartbeat half-period 50 cycles; `vio_rm_rst` path |
+| Bench                                             | RM                                     | Checks                                                                                                                                                                                                                                                                                           |
+| ------------------------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `tb/t1/tb_rp_t1.v`                              | add, mul (`-DRM_ADD` / `-DRM_MUL`) | reset values; `rm_id` after release; all 7 vectors (1-cycle latency); LED pattern steps exactly every 2^PRESCALE_W cycles over 6 steps (`PRESCALE_W = 4` in sim)                                                                                                                             |
+| `tb/t1/tb_top_dfx.v` + `tb/t1/vio_dfx_stub.v` | add, mul                               | design runs with the button released; all vectors through the VIO stub (2-cycle latency: RM register + decoupler register); decouple → y 0, `rm_id` FF, LEDs; uptime ticks every 100 cycles **and keeps ticking while decoupled**; heartbeat half-period 50 cycles; `vio_rm_rst` path |
 
 `vio_dfx_stub.v` is a simulation-only module with the same ports as the VIO IP. The bench drives its outputs hierarchically (`dut.U_VIO.probe_out2 = 16'h0003;`). It must never be added to Vivado.
 
@@ -463,6 +471,7 @@ Before the GUI flow, each RM was synthesised on its own (`synth_design -mode out
 ### 7.3 The mock-mode Tcl harness (`scripts/t1/hw_t1_mock.tcl`)
 
 The board script `hw_t1.tcl` would otherwise first run on the board, where a Tcl typo costs a session. So all Hardware Manager calls go through four thin wrappers (`t1_hw_connect`, `t1_hw_program`, `t1_hw_write`, `t1_hw_read`). With `::T1_MOCK 1` they drive a small simulated device instead:
+
 - it tracks which bitstream is loaded: a full resets uptime; a partial sets `rm_id`/`y` behaviour and keeps uptime;
 - uptime runs from a virtual clock;
 - decouple forces `rm_id FF`, `y 0`;
@@ -480,6 +489,7 @@ The board script `hw_t1.tcl` would otherwise first run on the board, where a Tcl
 ### 8.1 Project and sources
 
 A **new** project, `vivado/t1_dfx` (part `xc7z020clg484-1`). Enabling DFX is irreversible, so the T0 project was left untouched. Sources are added **in place** ("Copy sources into project" unticked) so every repo edit is seen:
+
 - design sources: `rtl/t1/top_dfx.v`, `rst_sync.v`, `uptime.v`, `dfx_decouple.v` and **only `rtl/t1/rm/rm_add.v`**. Adding `rm_mul.v` too would give two modules named `rp_t1`;
 - constraints: `constraints/top_dfx.xdc` (pins + 100 MHz clock), and `constraints/top_dfx_pblock.xdc` set as the **target** constraint file with "Synthesis" unticked (Pblocks are implementation-only);
 - nothing from `tb/`.
@@ -524,6 +534,7 @@ It was built with Tcl from the device database rather than drawn with the mouse,
 ![Device view: pblock_U_RP in the right part of X1Y1; synth DRC with the single ZPS7-1 warning](img/t1_dfx_pblock_placement_cp2.png)
 
 Why each choice:
+
 - **Full clock-region height (Y50–Y99).** Frames are one clock region tall (Section 3.2), and on 7-series `RESET_AFTER_RECONFIG` requires the Pblock to be vertically aligned to clock-region boundaries.
 - **Two DSP columns.** Each DSP column is 20 DSP48E1 tall within one clock region (DSP48_X3Y20..Y39 is 20 sites), so two columns give **40 DSP**: 2.5× what T2's 16 PEs need.
 - **Capacity** (`reports/cfg_*_utilization_pblock.rpt`): **4,400 LUT (1,800 usable as LUTRAM), 8,800 FF, 40 DSP, 10 BRAM tiles.** T1 uses under 2% of it. It is sized for T2 on purpose, so T1's partial bitstream size and swap time already predict T2's.
@@ -550,11 +561,11 @@ Each run folder then holds `top_dfx.bit` (full) and one partial: `U_RP_rm_add_pa
 
 ### 8.5 Per-configuration results
 
-| Config | WNS (ns) | WHS (ns) | Total LUT | Total FF | DSP | U_RP LUT | U_RP FF | U_RP DSP | Pblock LUT% / DSP% |
-|---|---|---|---|---|---|---|---|---|---|
-| cfg_add | +4.304 | +0.039 | 676 | 1,465 | 0 | 40 | 53 | 0 | 0.91 / 0.00 |
-| cfg_mul | +3.501 | +0.039 | 644 | 1,448 | 1 | 8 | 36 | 1 | 0.18 / 2.50 |
-| cfg_grey | +4.304 | +0.039 | 713 | 1,413 | 0 | 77 | 1 | 0 | 1.75 / 0.00 |
+| Config   | WNS (ns) | WHS (ns) | Total LUT | Total FF | DSP | U_RP LUT | U_RP FF | U_RP DSP | Pblock LUT% / DSP% |
+| -------- | -------- | -------- | --------- | -------- | --- | -------- | ------- | -------- | ------------------ |
+| cfg_add  | +4.304   | +0.039   | 676       | 1,465    | 0   | 40       | 53      | 0        | 0.91 / 0.00        |
+| cfg_mul  | +3.501   | +0.039   | 644       | 1,448    | 1   | 8        | 36      | 1        | 0.18 / 2.50        |
+| cfg_grey | +4.304   | +0.039   | 713       | 1,413    | 0   | 77       | 1       | 0        | 1.75 / 0.00        |
 
 Sources: `reports/<cfg>_timing_summary.rpt`, `<cfg>_utilization.rpt`, `<cfg>_utilization_U_RP.rpt`, `<cfg>_utilization_pblock.rpt`. TNS = THS = 0 everywhere.
 
@@ -562,26 +573,26 @@ Sources: `reports/<cfg>_timing_summary.rpt`, `<cfg>_utilization.rpt`, `<cfg>_uti
 
 **Implemented DRC** (0 errors in all three, `reports/<cfg>_drc.rpt`):
 
-| Rule | Where | Verdict |
-|---|---|---|
-| ZPS7-1 PS7 block required | top | expected (PL-only) |
-| PDCN-1569 ×3 LUT equation term check | inside `dbg_hub` (Xilinx IP) | harmless |
-| RTSTAT-10 no routable loads (17 nets) | unused `dbg_hub` outputs | harmless |
-| DPIP-1 ×2 input pipelining (`cfg_mul` only) | `U_RP/y_reg` A and B inputs | harmless at +3.5 ns; relevant to T2's DSP PEs |
-| DPOP-2 MREG output pipelining (`cfg_mul` only) | `U_RP/y_reg` | same |
+| Rule                                             | Where                          | Verdict                                       |
+| ------------------------------------------------ | ------------------------------ | --------------------------------------------- |
+| ZPS7-1 PS7 block required                        | top                            | expected (PL-only)                            |
+| PDCN-1569 ×3 LUT equation term check            | inside `dbg_hub` (Xilinx IP) | harmless                                      |
+| RTSTAT-10 no routable loads (17 nets)            | unused `dbg_hub` outputs     | harmless                                      |
+| DPIP-1 ×2 input pipelining (`cfg_mul` only)   | `U_RP/y_reg` A and B inputs  | harmless at +3.5 ns; relevant to T2's DSP PEs |
+| DPOP-2 MREG output pipelining (`cfg_mul` only) | `U_RP/y_reg`                 | same                                          |
 
 **The two BUFGs** (printed by `reports_t1.tcl`): `clk_IBUF_BUFG` drives the 100 MHz system clock (979–1,031 loads depending on the configuration). `dbg_hub/.../u_bufg_icon_tck` drives the debug hub's JTAG clock (482 loads). Nothing in the RP gets its own clock buffer. RMs must contain fabric logic only, and their clock arrives already buffered from the static region.
 
 **Where the static cost goes** (`reports/cfg_grey_utilization_hier.rpt`):
 
-| Static instance | LUT | FF |
-|---|---|---|
+| Static instance                          | LUT             | FF  |
+| ---------------------------------------- | --------------- | --- |
 | `dbg_hub` (inserted by Vivado for VIO) | 447 (24 LUTRAM) | 741 |
-| `U_VIO` (vio_dfx) | 168 | 559 |
-| `U_UP` (uptime) | 18 | 65 |
-| `U_DC` (decoupler) | 1 | 44 |
-| `U_RST` (reset sync) | 2 | 2 |
-| top (`rm_rst_n`) | 1 | 1 |
+| `U_VIO` (vio_dfx)                      | 168             | 559 |
+| `U_UP` (uptime)                        | 18              | 65  |
+| `U_DC` (decoupler)                     | 1               | 44  |
+| `U_RST` (reset sync)                   | 2               | 2   |
+| top (`rm_rst_n`)                       | 1               | 1   |
 
 The debug infrastructure is about 97% of the static LUTs. The static region's "own" logic is about 22 LUTs and 112 FFs, exactly what `synth_1` reported.
 
@@ -596,6 +607,7 @@ The debug infrastructure is about 97% of the static LUTs. The static region's "o
 ### 9.1 Session 1 (2026-09-29): full bitstream only
 
 `t1_full_add.bit` + `t1_full_add.ltx` programmed, nothing else:
+
 - `vio_rm_id = A1`; with a = 0003, b = 0004 → `vio_y = 0000_0007`; `vio_uptime` counting.
 - decouple = 0: LD3..0 counting, LD7 heartbeat.
 - decouple = 1: LD5 + LD6 + LD7 on, LD3..0 dark. The RM is isolated and held in reset; static is alive.
@@ -629,15 +641,15 @@ In order: the adder answered 3 + 4 = 7; decoupling isolated it (`FF`, 0); the pa
 **5) `t1_full_contrast`**: before A1, uptime 88 s; full program ≈ 9 s. The pasted log was cut off before the AFTER line, so this run's uptime-after isn't recorded. Self-test rows 2–3 show the same contrast independently (uptime 4 → 0, `reset=yes`).
 **6) `t1_selftest`**: 18/18 PASS → **T1 SELFTEST PASS**.
 
-| Step | Op | ms | uptime before → after (hex) | Check | rm_id |
-|---|---|---|---|---|---|
-| 1 | full | 8,986 | — → 00 | reset n/a | A1 |
-| 2 | full | 9,063 | 04 → 00 | reset = yes | A1 |
-| 3 | full | 9,132 | 04 → 00 | reset = yes | A1 |
-| 4 | partial_mul | 1,445 | 04 → 06 | continuity = yes | B2 |
-| 5 | partial_add | 1,405 | 06 → 08 | yes | A1 |
-| 6 | partial_grey | 1,436 | 09 → 0B | yes | 00 |
-| 7–18 | (mul, add, grey) × 4 | 1,390–1,472 | +2 every row | yes | B2 / A1 / 00 |
+| Step  | Op                    | ms           | uptime before → after (hex) | Check            | rm_id        |
+| ----- | --------------------- | ------------ | ---------------------------- | ---------------- | ------------ |
+| 1     | full                  | 8,986        | — → 00                     | reset n/a        | A1           |
+| 2     | full                  | 9,063        | 04 → 00                     | reset = yes      | A1           |
+| 3     | full                  | 9,132        | 04 → 00                     | reset = yes      | A1           |
+| 4     | partial_mul           | 1,445        | 04 → 06                     | continuity = yes | B2           |
+| 5     | partial_add           | 1,405        | 06 → 08                     | yes              | A1           |
+| 6     | partial_grey          | 1,436        | 09 → 0B                     | yes              | 00           |
+| 7–18 | (mul, add, grey) × 4 | 1,390–1,472 | +2 every row                 | yes              | B2 / A1 / 00 |
 
 Full table: `reports/hw_selftest_20261008_160232.csv`. Every row also ran all seven §6.1 vectors against the loaded RM (`t1_check`) and passed.
 
@@ -647,14 +659,14 @@ The VIO readings above are the authoritative evidence. The LED observations were
 
 Both RMs step their pattern when the 24-bit prescaler wraps, every 2²⁴ cycles = 16,777,216 × 10 ns = **167.8 ms**.
 
-| Cmd | Expected from the RTL | Observed | Why |
-|---|---|---|---|
-| 1 full add | ~9 s with the whole chip reconfiguring, then LD3..0 binary count, LD7 1 Hz | "LD3–0 blink at different rates" | Binary counter: LD0 toggles every step (period 335.5 ms, ≈ 3.0 Hz), LD1 ≈ 1.5 Hz, LD2 ≈ 0.75 Hz, LD3 ≈ 0.37 Hz. Each bit runs at half the rate of the one below |
-| 2 swap → mul | ~2 s with LD5 + LD6 on and LD3..0 dark; LD7 never pauses; then a walking one | "LD3–0 light up sequentially, faster"; heartbeat unchanged | Walking one: exactly one LED lit, moving every 167.8 ms; a full sweep LD0→LD3 takes 671 ms. It looks faster because the light visibly travels |
-| 3 swap → grey | Swap as above; then only LD7 | "Only LD7 blinking" | Greybox ties every RP output to 0 → `led_pat = 0000`. LD6 = `~rm_rst_n` is off because the RM is released after the swap. Only the static heartbeat remains |
-| 4 swap → add | Swap as above; then binary count | "Similar to cmd 2" (operator's recollection) | The VIO read A1 and y = 0000_0007, so `rm_add` was loaded and the LEDs must have shown the binary count. The recollection is most likely mixed up with cmd 2. VIO is authoritative |
-| 5 full contrast | ~9 s with everything stopped (LD7 too), then binary count | "Took a while to program", then the same pattern | A full bitstream reconfigures the whole device, static included |
-| 6 selftest | three ~9 s gaps, then 15 swaps cycling walking one / count / dark | "Repeated reprogramming" | As designed |
+| Cmd             | Expected from the RTL                                                        | Observed                                                    | Why                                                                                                                                                                                  |
+| --------------- | ---------------------------------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1 full add      | ~9 s with the whole chip reconfiguring, then LD3..0 binary count, LD7 1 Hz   | "LD3–0 blink at different rates"                           | Binary counter: LD0 toggles every step (period 335.5 ms, ≈ 3.0 Hz), LD1 ≈ 1.5 Hz, LD2 ≈ 0.75 Hz, LD3 ≈ 0.37 Hz. Each bit runs at half the rate of the one below                  |
+| 2 swap → mul   | ~2 s with LD5 + LD6 on and LD3..0 dark; LD7 never pauses; then a walking one | "LD3–0 light up sequentially, faster"; heartbeat unchanged | Walking one: exactly one LED lit, moving every 167.8 ms; a full sweep LD0→LD3 takes 671 ms. It looks faster because the light visibly travels                                       |
+| 3 swap → grey  | Swap as above; then only LD7                                                 | "Only LD7 blinking"                                         | Greybox ties every RP output to 0 → `led_pat = 0000`. LD6 = `~rm_rst_n` is off because the RM is released after the swap. Only the static heartbeat remains                     |
+| 4 swap → add   | Swap as above; then binary count                                             | "Similar to cmd 2" (operator's recollection)                | The VIO read A1 and y = 0000_0007, so `rm_add` was loaded and the LEDs must have shown the binary count. The recollection is most likely mixed up with cmd 2. VIO is authoritative |
+| 5 full contrast | ~9 s with everything stopped (LD7 too), then binary count                    | "Took a while to program", then the same pattern            | A full bitstream reconfigures the whole device, static included                                                                                                                      |
+| 6 selftest      | three ~9 s gaps, then 15 swaps cycling walking one / count / dark            | "Repeated reprogramming"                                    | As designed                                                                                                                                                                          |
 
 **Why LD7 keeps blinking through a partial.** The partial bitstream contains only frames that belong to `pblock_U_RP`. The heartbeat flop, the uptime counter, the VIO, the clock buffer and every static route are configured by frames outside that rectangle, which are never touched. So they keep running. LD5 and LD6 light during the swap because `vio_decouple = 1` drives LD5 directly and forces `rm_rst_n = 0` (LD6). LD3..0 go dark because the decoupler substitutes `led_pat = 0000`. The swap window is ~1.4 s of programming plus the VIO round trips before and after, ≈ 2 s. That matches uptime advancing **+2 s** on all 15 partials.
 
@@ -674,22 +686,22 @@ The phone video of `t1_swap_demo mul` shows LD7's heartbeat continuing while LD5
 
 **Table A (build)** is in Section 8.5. **Table B (bitstreams)**, from `bitstreams/t1/manifest.csv`:
 
-| File | Size (B) | vs full |
-|---|---|---|
-| t1_full_add.bit (also full_mul, full_grey) | 4,045,667 | 100% |
-| t1_partial_add.bit | 585,560 | 14.5% |
-| t1_partial_mul.bit | 585,560 | 14.5% |
-| t1_partial_grey.bit | 585,560 | 14.5% |
+| File                                       | Size (B)  | vs full |
+| ------------------------------------------ | --------- | ------- |
+| t1_full_add.bit (also full_mul, full_grey) | 4,045,667 | 100%    |
+| t1_partial_add.bit                         | 585,560   | 14.5%   |
+| t1_partial_mul.bit                         | 585,560   | 14.5%   |
+| t1_partial_grey.bit                        | 585,560   | 14.5%   |
 
 **Table C (JTAG program time)**, from the self-test CSV. Only `program_hw_devices` is timed; refresh and VIO traffic are excluded.
 
-| Operation | N | mean ± sd (ms) | range |
-|---|---|---|---|
-| Full | 3 | 9,060 ± 73 | 8,986 – 9,132 |
-| Partial add | 5 | 1,422 ± 26 | 1,390 – 1,457 |
-| Partial mul | 5 | 1,425 ± 34 | 1,391 – 1,472 |
-| Partial grey | 5 | 1,424 ± 28 | 1,392 – 1,460 |
-| All partials | 15 | 1,424 ± 27 | 1,390 – 1,472 |
+| Operation    | N  | mean ± sd (ms) | range          |
+| ------------ | -- | --------------- | -------------- |
+| Full         | 3  | 9,060 ± 73     | 8,986 – 9,132 |
+| Partial add  | 5  | 1,422 ± 26     | 1,390 – 1,457 |
+| Partial mul  | 5  | 1,425 ± 34     | 1,391 – 1,472 |
+| Partial grey | 5  | 1,424 ± 28     | 1,392 – 1,460 |
+| All partials | 15 | 1,424 ± 27     | 1,390 – 1,472 |
 
 **Table D (functional)**: 15/15 partials with correct `rm_id`, all vectors correct and uptime continuous; every full program resets uptime. Details are in Section 9 and [T1_RESULTS.md](T1_RESULTS.md).
 
@@ -697,6 +709,7 @@ The phone video of `t1_swap_demo mul` shows LD7's heartbeat continuing while LD5
 
 - **Partial size scales with Pblock area, not with RM content.** The add, mul and greybox partials are byte-for-byte the same size, although the RMs use 40, 8 and 77 LUTs. A partial writes *every* frame of the Pblock, including the empty ones.
 - **Program time scales with size.** A straight line through the two measured means:
+
   - slope b = (9,060.3 − 1,423.6) ms / (4,045,667 − 585,560) B = 7,636.7 ms / 3,460,107 B ≈ **2.21 µs per byte** ≈ 453 kB/s ≈ 3.6 Mbit/s effective;
   - intercept a = 9,060.3 − 2.207 × 4,045.667 ≈ **0.13 s** fixed overhead per program.
 
@@ -713,12 +726,12 @@ Before session 2 we predicted a partial would take 1.5–2.5 s (vs ~9 s full) if
 
 ### 10.5 Comparison with the T0 baseline
 
-| | T0 | T1 | Comparable? |
-|---|---|---|---|
-| DSP | 16 (array) | 0 / 1 / 0 (RM only) | No: different functions. T1's RMs are deliberately tiny |
-| LUT | 1,335 (UART system: array + controller + loader + UART) | 644–713 total, of which ≈ 615 debug cores | No: T0's count is datapath plumbing; T1's static is mostly VIO + `dbg_hub` |
-| FF | 665 | 1,413–1,465 | No, same reason |
-| WNS @ 100 MHz | +0.378 ns (UART), +1.427 ns (VIO build) | +3.501 / +4.304 ns | Same part, clock and tool, but T1's design is much smaller, so more slack is expected |
+|               | T0                                                      | T1                                          | Comparable?                                                                           |
+| ------------- | ------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------- |
+| DSP           | 16 (array)                                              | 0 / 1 / 0 (RM only)                         | No: different functions. T1's RMs are deliberately tiny                               |
+| LUT           | 1,335 (UART system: array + controller + loader + UART) | 644–713 total, of which ≈ 615 debug cores | No: T0's count is datapath plumbing; T1's static is mostly VIO + `dbg_hub`          |
+| FF            | 665                                                     | 1,413–1,465                                | No, same reason                                                                       |
+| WNS @ 100 MHz | +0.378 ns (UART), +1.427 ns (VIO build)                 | +3.501 / +4.304 ns                          | Same part, clock and tool, but T1's design is much smaller, so more slack is expected |
 
 What *is* comparable going forward: T0's DSP-based PE is what T2 puts inside this Pblock. For T3, compare RMs inside the same DFX build (an int16 RM rebuilt as an RM is the like-for-like baseline), and cite T0 alongside.
 
@@ -726,21 +739,21 @@ What *is* comparable going forward: T0's DSP-based PE is what T2 puts inside thi
 
 ## 11. Bugs and lessons
 
-| # | Phase | Symptom | Cause | Fix | Lesson |
-|---|---|---|---|---|---|
-| 1 | A | OOC synthesis: `rm_mul` uses **2** DSP48E1 | `use_dsp = "yes"` on the module also maps adders; the 24-bit prescaler went into a DSP | attribute on the `prod` signal only | Attributes apply to everything in their scope; check DSP counts with OOC synthesis before building |
-| 2 | A | iverilog: `sorry: Attributes not supported on net declaration assignments.` | `(* use_dsp *) wire x = expr;` | declare, then `assign` | Keep RTL in the subset every tool accepts |
-| 3 | A | OOC check printed FF = 0 | filtered on `PRIMITIVE_GROUP == REGISTER`; the real group is `FLOP_LATCH` | fixed filter | Sanity-check a script's numbers against `report_utilization` |
-| 4 | A | Tcl `lmap` would fail on the board | Vivado 2022.2 ships Tcl **8.5.14**; `lmap` is 8.6 | `foreach` | Test Tcl in Vivado's own interpreter |
-| 5 | A | `synth_design` died: `invalid command name "rt-undefined"` on a file that had just synthesised fine | transient Vivado synthesis-helper fault, stale `.Xil/` state | delete `vivado/.Xil/`, re-run | Not every failure is your code; clear tool scratch state before debugging |
-| 6 | B | Pblock in the left part of X1Y1 rejected | the configuration column (RPM_X 205, slices X68–X79) splits X1Y1, and the left part has no DSP column | right part, SLICE_X80..X103 with both DSP columns | Read the device grid (RPM_X) before choosing a region |
-| 7 | B | BRAM sites missing from the Pblock | 7-series BRAM columns mix `RAMB18E1` / `RAMBFIFO18E1` site types; a `SITE_TYPE` filter got about half | site-name ranges | Don't trust a site-type filter on mixed columns |
-| 8 | B | (surprise, not a bug) `dbg_hub` lines appeared in `top_dfx_pblock.xdc` | it is the target constraint file, so Ctrl+S writes debug settings there | keep them | Know which file is the target before saving |
-| 9 | pre-D | Tcl would throw "invalid octal number" on uptime `00000009` | `expr` on a zero-padded hex string parses it as octal | `if/else` instead of `?:` | Never pass hex strings through `expr` |
-| 10 | pre-D | negative mock caught only 1 of 15 bad partials | "uptime not decreasing" misses a reset at ~0 | `after − before ≥ floor(ms/1000)` | Write the negative test; it shows whether a check can fail |
-| 11 | D | `[Xicom 50-103] Static bitstream must first be programmed`, DONE = 0 | partial loaded onto a blank device | program `t1_full_add.bit` first | A partial assumes its static region is already there |
-| 12 | D | probes missing or wrong in the GUI | a probes file other than `t1_full_add.ltx` chosen in Program Device (run folders also hold `debug_nets.ltx` and `U_RP_*_partial.ltx`) | always `bitstreams/t1/t1_full_add.ltx`; the script sets `PROBES.FILE` itself | The VIO is static, so one `.ltx` serves every configuration |
-| 13 | D | `WARNING: [Labtools 27-1952] VIO hw_probe OUTPUT_VALUE properties differ` on every program | Hardware Manager's cached probe values go stale after a program | harmless; the script re-writes decouple / a / b | Cached tool state is not the hardware: always write, then read back |
+| #  | Phase | Symptom                                                                                                 | Cause                                                                                                                                       | Fix                                                                              | Lesson                                                                                             |
+| -- | ----- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| 1  | A     | OOC synthesis: `rm_mul` uses **2** DSP48E1                                                      | `use_dsp = "yes"` on the module also maps adders; the 24-bit prescaler went into a DSP                                                    | attribute on the `prod` signal only                                            | Attributes apply to everything in their scope; check DSP counts with OOC synthesis before building |
+| 2  | A     | iverilog: `sorry: Attributes not supported on net declaration assignments.`                           | `(* use_dsp *) wire x = expr;`                                                                                                            | declare, then `assign`                                                         | Keep RTL in the subset every tool accepts                                                          |
+| 3  | A     | OOC check printed FF = 0                                                                                | filtered on `PRIMITIVE_GROUP == REGISTER`; the real group is `FLOP_LATCH`                                                               | fixed filter                                                                     | Sanity-check a script's numbers against `report_utilization`                                     |
+| 4  | A     | Tcl `lmap` would fail on the board                                                                    | Vivado 2022.2 ships Tcl **8.5.14**; `lmap` is 8.6                                                                                   | `foreach`                                                                      | Test Tcl in Vivado's own interpreter                                                               |
+| 5  | A     | `synth_design` died: `invalid command name "rt-undefined"` on a file that had just synthesised fine | transient Vivado synthesis-helper fault, stale `.Xil/` state                                                                              | delete `vivado/.Xil/`, re-run                                                  | Not every failure is your code; clear tool scratch state before debugging                          |
+| 6  | B     | Pblock in the left part of X1Y1 rejected                                                                | the configuration column (RPM_X 205, slices X68–X79) splits X1Y1, and the left part has no DSP column                                      | right part, SLICE_X80..X103 with both DSP columns                                | Read the device grid (RPM_X) before choosing a region                                              |
+| 7  | B     | BRAM sites missing from the Pblock                                                                      | 7-series BRAM columns mix `RAMB18E1` / `RAMBFIFO18E1` site types; a `SITE_TYPE` filter got about half                                 | site-name ranges                                                                 | Don't trust a site-type filter on mixed columns                                                    |
+| 8  | B     | (surprise, not a bug) `dbg_hub` lines appeared in `top_dfx_pblock.xdc`                              | it is the target constraint file, so Ctrl+S writes debug settings there                                                                     | keep them                                                                        | Know which file is the target before saving                                                        |
+| 9  | pre-D | Tcl would throw "invalid octal number" on uptime `00000009`                                           | `expr` on a zero-padded hex string parses it as octal                                                                                     | `if/else` instead of `?:`                                                    | Never pass hex strings through `expr`                                                            |
+| 10 | pre-D | negative mock caught only 1 of 15 bad partials                                                          | "uptime not decreasing" misses a reset at ~0                                                                                                | `after − before ≥ floor(ms/1000)`                                            | Write the negative test; it shows whether a check can fail                                         |
+| 11 | D     | `[Xicom 50-103] Static bitstream must first be programmed`, DONE = 0                                  | partial loaded onto a blank device                                                                                                          | program `t1_full_add.bit` first                                                | A partial assumes its static region is already there                                               |
+| 12 | D     | probes missing or wrong in the GUI                                                                      | a probes file other than `t1_full_add.ltx` chosen in Program Device (run folders also hold `debug_nets.ltx` and `U_RP_*_partial.ltx`) | always `bitstreams/t1/t1_full_add.ltx`; the script sets `PROBES.FILE` itself | The VIO is static, so one `.ltx` serves every configuration                                      |
+| 13 | D     | `WARNING: [Labtools 27-1952] VIO hw_probe OUTPUT_VALUE properties differ` on every program            | Hardware Manager's cached probe values go stale after a program                                                                             | harmless; the script re-writes decouple / a / b                                  | Cached tool state is not the hardware: always write, then read back                                |
 
 Also from Phase A: the plan's Pblock-file header cited §7.6 instead of §7.8 (fixed), and `reports_t1.tcl` had to name `top_dfx_routed.dcp` exactly (Section 8.4).
 
@@ -751,6 +764,7 @@ Also from Phase A: the plan's Pblock-file header cited §7.6 instead of §7.8 (f
 Facts and open questions only; the T2 plan is written separately.
 
 **Facts:**
+
 - **The Pblock is ready.** `pblock_U_RP` (right part of X1Y1; 4,400 LUT, 8,800 FF, 40 DSP, 10 BRAM) closed timing in three configurations, passed DRC and `pr_verify`, and swapped 15/15 times on silicon. It can be reused unchanged.
 - **Swap ≈ 1.4 s for any RM in this Pblock.** Partial size is fixed by the Pblock (585,560 B), and program time is about 0.13 s + 2.21 µs/byte. An int16, int8 or int4 array RM in this Pblock will swap in the same ~1.4 s over JTAG. Swap latency is not a function of precision.
 - **The decoupler and reset protocol work.** `dfx_decouple` isolated the RP on every swap; T2 reuses it with a new `W`/`SAFE`. T1 has no controller, so "the controller must not start a run while decoupled" is still a requirement to implement and test.
@@ -758,6 +772,7 @@ Facts and open questions only; the T2 plan is written separately.
 - **DSP input pipelining.** `cfg_mul`'s critical path is a static register driving the DSP's A input across a partition pin with no DSP input register (DPIP-1, DPOP-2). It met timing easily at T1's size. T0's PE has the same unregistered-input structure, and its critical path already ended at a DSP A input (+0.378 ns).
 
 **Open questions for T2 kickoff:**
+
 - **Partition boundary.** Whole 4×4 `array` as the RP (≈ 900 partition pins: west 64 + north 64 + acc 768 + control), or array + result select + `sat32` (≈ 150 pins)? T1 routed 78 partition pins with ≥ 3.5 ns slack, which is no evidence either way at 900.
 - **Precision behind int16-wide ports.** Untested in T1. The quantisation notes in [T1_RESULTS.md](T1_RESULTS.md) (symmetric, zero-point 0; saturate inputs, don't truncate; host-side scaling; reuse `python/quant.py`) are research, not decisions.
 - **DSP pipelining in the PE.** Whether to enable AREG/BREG/MREG in T2's PEs depends on the T2 critical path, which doesn't exist yet.
@@ -784,6 +799,7 @@ Facts and open questions only; the T2 plan is written separately.
    cd vivado && C:/Xilinx/Vivado/2022.2/bin/vivado.bat -mode batch -source ../scripts/t1/reports_t1.tcl
                                                                              # -> docs/t1/reports/, pr_verify PASS
    ```
+
    Or skip steps 3–4 and use the committed bitstreams in `bitstreams/t1/` directly.
 5. **Dry-run the board script without a board:**
    ```
@@ -841,6 +857,7 @@ RC_Project/
 ```
 
 If you read only five files, read these, in this order:
+
 1. `rtl/t1/top_dfx.v`: the whole static region and the swap protocol in 80 lines.
 2. `rtl/t1/rm/rm_mul.v`: what an RM looks like, including the frozen port list and the `use_dsp` lesson.
 3. `constraints/top_dfx_pblock.xdc`: the rectangle that defines the partial bitstream.
@@ -851,51 +868,51 @@ If you read only five files, read these, in this order:
 
 ## 15. Glossary
 
-| Term | Meaning |
-|---|---|
-| **BSCAN / BSCANE2** | Boundary-scan primitive that lets user logic (here the debug hub) sit on the JTAG chain |
-| **Bitstream** | File that configures an FPGA; full (whole device) or partial (one Pblock) |
-| **BUFG** | Global clock buffer; drives a low-skew clock network |
-| **Clock region** | One of the rectangular tiles (`X0Y0`…`X1Y2` on this part) the die is divided into; a frame is one clock region tall |
-| **Configuration** | In DFX: one complete design = static + one RM per RP (`cfg_add`, `cfg_mul`, `cfg_grey`) |
-| **Configuration column** | Column of configuration-related sites (BSCAN, ICAP, ...) running through the die; it splits `X1Y1` |
-| **Configuration logic / engine** | Dedicated on-chip logic that receives bitstreams and writes frames |
-| **Configuration memory** | SRAM cells that hold the FPGA's configuration, separate from the design's registers |
-| **Debug hub (`dbg_hub`)** | Core Vivado inserts automatically to connect VIO/ILA cores to JTAG through BSCANE2 |
-| **Decoupler** | Static logic that replaces the RP's outputs with safe values during a swap (`dfx_decouple`) |
-| **DFX** | Dynamic Function eXchange: Xilinx's partial reconfiguration |
-| **DONE pin / DONE LED** | Goes high when configuration completes; low during a full configuration |
-| **DRC** | Design Rule Check |
-| **DSP48E1** | Hard multiplier + 48-bit accumulator block (25×18 multiplier) |
-| **Frame** | Smallest addressable unit of configuration memory; one column, one clock region tall |
-| **Full bitstream** | Configures every frame of the device; stops all user logic while loading |
-| **Greybox** | Vivado-generated empty RM: outputs tied to 0, inputs terminated |
-| **Hardware Manager** | The part of Vivado that talks to boards over JTAG |
-| **ICAP** | Internal Configuration Access Port: lets fabric logic write configuration |
-| **JTAG / TAP** | 4-wire test and programming interface / its on-chip state machine |
-| **LTX** | Probes file (`.ltx`) mapping VIO/ILA probe names to debug-core ports |
-| **LUT / LUT1** | Look-up table; a LUT1 is a 1-input LUT, used as a buffer or constant |
-| **OOC** | Out-of-context synthesis: a module synthesised on its own (how RMs are built) |
-| **Parent / child run** | Parent implements static + first RM and locks the static; children reuse it |
-| **Partial bitstream** | Configures only a Pblock's frames; the rest of the chip keeps running |
-| **Partition Definition (PD)** | The set of RMs that may occupy an RP (`pd_t1`) |
-| **Partition pin / PPLOC** | Fixed routing point where a static net meets an RP net; 78 in T1 |
-| **PCAP** | Processor Configuration Access Port: the Zynq PS's path to the configuration logic |
-| **Pblock** | Physical rectangle of the die that a cell is confined to (`pblock_U_RP`) |
-| **PL / PS** | Programmable Logic (fabric) / Processing System (ARM) on a Zynq |
-| **`pr_verify`** | Vivado check that several routed configurations share an identical static region |
-| **P register** | The DSP48E1's output register; `rm_mul`'s `y` lives here |
-| **RESET_AFTER_RECONFIG** | Pblock property: the Pblock's flops are reset after a partial load; needs clock-region-aligned edges on 7-series |
-| **RM** | Reconfigurable Module: one implementation of an RP (`rm_add`, `rm_mul`) |
-| **RP** | Reconfigurable Partition: the swappable instance (`U_RP`) |
-| **RPM_X** | A site's x-coordinate in a device-wide grid shared by all site types; used to compare column positions |
-| **Sign extension** | Widening a signed number by copying its top bit |
-| **SNAPPING_MODE** | Pblock property that snaps edges to legal reconfigurable boundaries |
-| **Static region** | Everything that is not reconfigured; keeps running during a swap |
-| **Two's complement** | The standard encoding of signed integers; the top bit has negative weight |
-| **VIO** | Virtual Input/Output debug core driven from Hardware Manager over JTAG |
-| **WNS / WHS** | Worst setup / hold slack; positive means timing is met |
-| **XDC** | Xilinx Design Constraints file |
+| Term                                   | Meaning                                                                                                                  |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| **BSCAN / BSCANE2**              | Boundary-scan primitive that lets user logic (here the debug hub) sit on the JTAG chain                                  |
+| **Bitstream**                    | File that configures an FPGA; full (whole device) or partial (one Pblock)                                                |
+| **BUFG**                         | Global clock buffer; drives a low-skew clock network                                                                     |
+| **Clock region**                 | One of the rectangular tiles (`X0Y0`…`X1Y2` on this part) the die is divided into; a frame is one clock region tall |
+| **Configuration**                | In DFX: one complete design = static + one RM per RP (`cfg_add`, `cfg_mul`, `cfg_grey`)                            |
+| **Configuration column**         | Column of configuration-related sites (BSCAN, ICAP, ...) running through the die; it splits `X1Y1`                     |
+| **Configuration logic / engine** | Dedicated on-chip logic that receives bitstreams and writes frames                                                       |
+| **Configuration memory**         | SRAM cells that hold the FPGA's configuration, separate from the design's registers                                      |
+| **Debug hub (`dbg_hub`)**      | Core Vivado inserts automatically to connect VIO/ILA cores to JTAG through BSCANE2                                       |
+| **Decoupler**                    | Static logic that replaces the RP's outputs with safe values during a swap (`dfx_decouple`)                            |
+| **DFX**                          | Dynamic Function eXchange: Xilinx's partial reconfiguration                                                              |
+| **DONE pin / DONE LED**          | Goes high when configuration completes; low during a full configuration                                                  |
+| **DRC**                          | Design Rule Check                                                                                                        |
+| **DSP48E1**                      | Hard multiplier + 48-bit accumulator block (25×18 multiplier)                                                           |
+| **Frame**                        | Smallest addressable unit of configuration memory; one column, one clock region tall                                     |
+| **Full bitstream**               | Configures every frame of the device; stops all user logic while loading                                                 |
+| **Greybox**                      | Vivado-generated empty RM: outputs tied to 0, inputs terminated                                                          |
+| **Hardware Manager**             | The part of Vivado that talks to boards over JTAG                                                                        |
+| **ICAP**                         | Internal Configuration Access Port: lets fabric logic write configuration                                                |
+| **JTAG / TAP**                   | 4-wire test and programming interface / its on-chip state machine                                                        |
+| **LTX**                          | Probes file (`.ltx`) mapping VIO/ILA probe names to debug-core ports                                                   |
+| **LUT / LUT1**                   | Look-up table; a LUT1 is a 1-input LUT, used as a buffer or constant                                                     |
+| **OOC**                          | Out-of-context synthesis: a module synthesised on its own (how RMs are built)                                            |
+| **Parent / child run**           | Parent implements static + first RM and locks the static; children reuse it                                              |
+| **Partial bitstream**            | Configures only a Pblock's frames; the rest of the chip keeps running                                                    |
+| **Partition Definition (PD)**    | The set of RMs that may occupy an RP (`pd_t1`)                                                                         |
+| **Partition pin / PPLOC**        | Fixed routing point where a static net meets an RP net; 78 in T1                                                         |
+| **PCAP**                         | Processor Configuration Access Port: the Zynq PS's path to the configuration logic                                       |
+| **Pblock**                       | Physical rectangle of the die that a cell is confined to (`pblock_U_RP`)                                               |
+| **PL / PS**                      | Programmable Logic (fabric) / Processing System (ARM) on a Zynq                                                          |
+| **`pr_verify`**                | Vivado check that several routed configurations share an identical static region                                         |
+| **P register**                   | The DSP48E1's output register; `rm_mul`'s `y` lives here                                                             |
+| **RESET_AFTER_RECONFIG**         | Pblock property: the Pblock's flops are reset after a partial load; needs clock-region-aligned edges on 7-series         |
+| **RM**                           | Reconfigurable Module: one implementation of an RP (`rm_add`, `rm_mul`)                                              |
+| **RP**                           | Reconfigurable Partition: the swappable instance (`U_RP`)                                                              |
+| **RPM_X**                        | A site's x-coordinate in a device-wide grid shared by all site types; used to compare column positions                   |
+| **Sign extension**               | Widening a signed number by copying its top bit                                                                          |
+| **SNAPPING_MODE**                | Pblock property that snaps edges to legal reconfigurable boundaries                                                      |
+| **Static region**                | Everything that is not reconfigured; keeps running during a swap                                                         |
+| **Two's complement**             | The standard encoding of signed integers; the top bit has negative weight                                                |
+| **VIO**                          | Virtual Input/Output debug core driven from Hardware Manager over JTAG                                                   |
+| **WNS / WHS**                    | Worst setup / hold slack; positive means timing is met                                                                   |
+| **XDC**                          | Xilinx Design Constraints file                                                                                           |
 
 ---
 
