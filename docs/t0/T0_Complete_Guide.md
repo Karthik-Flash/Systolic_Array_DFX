@@ -1,7 +1,7 @@
 # T0 Complete Guide
 ## A 4×4 Systolic Matrix Multiplier on the ZedBoard, from Arithmetic to Silicon
 
-**Project:** Precision-scalable systolic matrix multiplier (Reconfigurable Computing, CS G553, BITS Hyderabad)
+**Project:** Precision-Scalable systolic matrix multiplier (Reconfigurable Computing, CS G553, BITS Hyderabad)
 **Board:** ZedBoard, Zynq-7000 `xc7z020clg484-1` · **Tools:** Vivado 2022.2, Python 3 + NumPy, Icarus/XSim
 **Repo:** https://github.com/Karthik-Flash/systolic_array
 **Status:** T0 complete. Verified in simulation, implemented at 100 MHz, and computing correctly on physical silicon.
