@@ -36,3 +36,5 @@ docs/t2/VIDEO_SHOT_LIST.md
 !submission/**
 Video_Demo.mp4# Report source (the PDF is the submitted version)
 submission/*.docx
+# Demo video (kept locally, not part of the submission)
+Video_Demo.mp4
