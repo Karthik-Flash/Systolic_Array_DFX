@@ -1,4 +1,4 @@
-"""Build and run all T1 iverilog sims (T1_PLAN §6.4).
+"""Build and run all T1 iverilog sims.
 
 tb_rp_t1 x {add, mul} and tb_top_dfx x {add, mul}, iverilog -g2005 -> vvp,
 outputs in sim/t1_build/. Prints a summary and ALL PASS; exits non-zero on

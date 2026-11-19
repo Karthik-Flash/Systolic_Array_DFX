@@ -1,10 +1,10 @@
 `timescale 1ns/1ps
-// rm_common.v -- submodules shared by the T2 RMs (T2_PLAN sec. 6.5).
+// rm_common.v -- submodules shared by the T2 RMs.
 //   lane_sat   : combinational int16 -> OUT_W clamp (saturate, never truncate)
 //   rm_readout : 16:1 result select by sel, then sat32 (ACC_W > 32) or sign
 //                extension (ACC_W <= 32); result and ovf registered
 //   rm_badge   : rm_id signature + blinking LED badge
-// Not every RM uses every module; compile benches with -s <bench> (G26).
+// Not every RM uses every module; compile benches with -s <bench>.
 // Verilog-2001, fabric logic only.
 
 // ---------------------------------------------------------------------------
@@ -29,7 +29,7 @@ endmodule
 // rm_readout: result <= C[sel] as int32, ovf <= C[sel] was clamped.
 // ACC_W > 32: sat32 with exactly T0 loader.v's semantics (7FFFFFFF / 80000000).
 // ACC_W <= 32: sign extension; ovf is a dont_touch flop with D = 0, so the
-// partition pin stays flop-driven (G20).
+// partition pin stays flop-driven.
 // acc_bus layout is T0's: entry k = 4i + j at [ACC_W*k +: ACC_W].
 // ---------------------------------------------------------------------------
 module rm_readout #(

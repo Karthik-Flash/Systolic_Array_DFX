@@ -1,7 +1,7 @@
-"""Build and run every T2 bench (T2_PLAN sec. 8.2).
+"""Build and run every T2 bench.
 
 Simulator: Vivado 2022.2 XSim (xvlog -> xelab -> xsim) for all builds -- the installed
-Icarus is v0.9.7, which cannot parse T0's rtl/array.v (2-D net arrays); see plan sec. 16.
+Icarus is v0.9.7, which cannot parse T0's rtl/array.v (2-D net arrays).
 Icarus is still used as a lint (iverilog -g2005 -Wall, compile only) on every build
 that does not contain rtl/array.v.
 
@@ -25,7 +25,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 BUILD = ROOT / "sim" / "t2_build"
 REPORTS = ROOT / "docs" / "t2" / "reports"
-VIVADO_BIN = Path("C:/Xilinx/Vivado/2022.2/bin")      # calibration knob: Vivado install
+VIVADO_BIN = Path("C:/Xilinx/Vivado/2022.2/bin")      # Vivado install folder
 STUB = "tb/t2/vio_t2_stub.v"
 PREC_OF = {"rm_int16": "INT16", "rm_int8": "INT8", "rm_int4": "INT4"}
 

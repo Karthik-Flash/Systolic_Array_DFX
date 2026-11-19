@@ -1,4 +1,4 @@
-"""Collect T1 DFX bitstreams from the Vivado run dirs (T1_PLAN §9.1).
+"""Collect T1 DFX bitstreams from the Vivado run dirs.
 
 vivado/t1_dfx/t1_dfx.runs/{impl_1, child_0_impl_1, child_1_impl_1}
   -> bitstreams/t1/t1_full_<rm>.bit, t1_partial_<rm>.bit, t1_full_add.ltx

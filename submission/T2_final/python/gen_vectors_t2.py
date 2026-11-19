@@ -1,4 +1,4 @@
-"""Generate T2 vectors: sim/t2_vectors/<int16|int8|int4>/<case>/ (T2_PLAN sec. 7.3, 7.4).
+"""Generate T2 vectors: sim/t2_vectors/<int16|int8|int4>/<case>/.
 
 Run from the project root: python python/gen_vectors_t2.py
 Seeds are fixed per case (recorded in meta.json), so the output is reproducible.

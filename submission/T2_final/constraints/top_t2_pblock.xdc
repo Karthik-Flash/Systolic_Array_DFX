@@ -1,4 +1,4 @@
-# top_t2_pblock.xdc -- pblock_U_RP, verbatim from T1's top_dfx_pblock.xdc (T2_PLAN D8, sec. 6.7).
+# top_t2_pblock.xdc -- pblock_U_RP, verbatim from T1's top_dfx_pblock.xdc.
 # Implementation-only (used_in_synthesis false) and the project's target constraints file.
 # If a GUI save later appends dbg_hub lines here, keep them (same as T1).
 

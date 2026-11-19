@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 // vio_dfx_stub.v -- SIM-ONLY stand-in for the vio_dfx VIO IP (T1).
-// NEVER add this file to the Vivado project. Same ports as the IP; the
+// Do not add this file to the Vivado project. Same ports as the IP; the
 // outputs are plain regs that the bench drives hierarchically, e.g.
 //   dut.U_VIO.probe_out2 = 16'h0003;
 module vio_dfx (

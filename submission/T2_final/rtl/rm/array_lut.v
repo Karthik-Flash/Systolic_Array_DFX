@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-// array_lut.v -- 4x4 output-stationary mesh of pe_lut (T2_PLAN sec. 6.5).
+// array_lut.v -- 4x4 output-stationary mesh of pe_lut.
 // Same geometry and bus layout as T0 rtl/array.v:
 //   west_bus  : lane i (row i) at [DATA_W*i +: DATA_W]
 //   north_bus : lane j (column j) at [DATA_W*j +: DATA_W]

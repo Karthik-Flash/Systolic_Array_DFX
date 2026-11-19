@@ -1,4 +1,4 @@
-# t2_filesets.tcl -- THE single list of T2 sources (T2_PLAN sec. 8.4, G21).
+# t2_filesets.tcl -- the single list of T2 sources.
 # Read by scripts/t2/run_sims.py (parsed as text), ooc_check.tcl and create_project_t2.tcl (sourced).
 # Paths are relative to the repo root; ::T2_ROOT is the absolute repo root when sourced.
 # Format rule (the Python parser relies on it): one `set ::NAME {...}` or
@@ -21,7 +21,7 @@ set ::T2_RM_FILES(rm_int4)  {rtl/t2/rm/rm_int4.v rtl/t2/rm/array_lut.v rtl/t2/rm
 set ::T2_XDC_PINS   constraints/top_t2.xdc
 set ::T2_XDC_PBLOCK constraints/top_t2_pblock.xdc
 
-# VIO vio_t2 probe widths, index order probe_in0..4 / probe_out0..5 (T2_PLAN sec. 4)
+# VIO vio_t2 probe widths, index order probe_in0..4 / probe_out0..5
 set ::T2_VIO_IN_WIDTHS  {32 8 32 4 16}
 set ::T2_VIO_OUT_WIDTHS {1 1 1 4 256 256}
 

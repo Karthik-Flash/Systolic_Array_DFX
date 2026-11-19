@@ -1,10 +1,10 @@
-# create_project_t2.tcl -- T2_PLAN sec. 8.4 / 9.3: create the T2 DFX project t2_dfx.
+# create_project_t2.tcl -- create the T2 DFX project t2_dfx.
 #
-# Real project (Vivado GUI Tcl console, Phase B):
+# Real project (Vivado GUI Tcl console):
 #   cd D:/Projects/RC_Project/vivado
 #   source D:/Projects/RC_Project/scripts/t2/create_project_t2.tcl
 #   -> creates D:/Projects/RC_Project/vivado/t2_dfx
-# Scratch validation (batch, Phase A1), from vivado/scratch_t2/:
+# Scratch validation (batch), from vivado/scratch_t2/:
 #   vivado -mode batch -source ../../scripts/t2/create_project_t2.tcl -tclargs <dir> [synth]
 #   <dir> may already exist only under vivado/scratch_t2/; `synth` is allowed only there.
 #

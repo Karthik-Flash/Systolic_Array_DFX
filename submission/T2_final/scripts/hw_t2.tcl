@@ -1,4 +1,4 @@
-# hw_t2.tcl -- T2 board procedures (docs/t2/T2_PLAN.md §11.1)
+# hw_t2.tcl -- T2 board procedures
 #
 # Usage (Vivado 2022.2 Hardware Manager, Tcl console):
 #   source D:/Projects/RC_Project/scripts/t2/hw_t2.tcl
@@ -19,7 +19,7 @@ set ::T2_PRECS  {int16 int8 int4 grey}
 array set ::T2_CODE {int16 16 int8 08 int4 04 grey 00}
 array set ::T2_PREC_OF {16 int16 08 int8 04 int4 00 grey ff decoupled}
 set ::T2_BOARD_CASES {counting asym_small random_full extremes_neg extremes_mix}
-# locked VIO port of every probe (plan §4), used only if the .ltx renamed a net
+# locked VIO port of every probe, used only if the .ltx renamed a net
 array set ::T2_PORT {vio_decouple probe_out0 vio_rm_rst probe_out1 vio_start probe_out2
     vio_sel probe_out3 vio_a probe_out4 vio_b probe_out5 vio_result probe_in0
     vio_rm_id probe_in1 vio_uptime probe_in2 vio_flags probe_in3 vio_runs probe_in4}
@@ -233,7 +233,7 @@ proc t2_connect {} {
     puts "T2: connected (device $::T2_DEV; [t2_hw_info]). Next: t2_program full int16"
 }
 proc t2__init_outputs {} {
-    # after a full program every VIO output is 0 in hardware; writing 0 resyncs the cache (G11)
+    # after a full program every VIO output is 0 in hardware; writing 0 resyncs the cache
     foreach n {vio_decouple vio_rm_rst vio_start vio_sel} { t2_hw_write $n 0 }
     t2_hw_write vio_a [string repeat 0 64]
     t2_hw_write vio_b [string repeat 0 64]

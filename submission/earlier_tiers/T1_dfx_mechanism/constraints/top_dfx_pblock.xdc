@@ -1,4 +1,4 @@
-# top_dfx_pblock.xdc -- pblock_U_RP (T1_PLAN §7.8). Implementation-only.
+# top_dfx_pblock.xdc -- pblock_U_RP. Implementation-only.
 # Created by Tcl from the device database, then saved here by Vivado (Ctrl+S) as the Target Constraint File.
 # The dbg_hub lines below are also written by Vivado on save; keep them.
 

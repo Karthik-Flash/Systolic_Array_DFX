@@ -1,4 +1,4 @@
-# reports_t1.tcl -- T1_PLAN §9.2: per-config timing/utilization reports + pr_verify.
+# reports_t1.tcl -- per-config timing/utilization reports + pr_verify.
 # Run from inside vivado/ (journals/logs stay in the gitignored folder):
 #   cd vivado
 #   C:/Xilinx/Vivado/2022.2/bin/vivado.bat -mode batch -source ../scripts/t1/reports_t1.tcl
@@ -9,7 +9,7 @@ set runs $root/vivado/t1_dfx/t1_dfx.runs
 set out  $root/docs/t1/reports
 file mkdir $out
 
-# run -> configuration (T1_PLAN §3)
+# run -> configuration
 set cfgs {impl_1 cfg_add child_0_impl_1 cfg_mul child_1_impl_1 cfg_grey}
 
 # first number after "| <label>" in a report_utilization table, e.g. "| Slice LUTs* | 850 |"

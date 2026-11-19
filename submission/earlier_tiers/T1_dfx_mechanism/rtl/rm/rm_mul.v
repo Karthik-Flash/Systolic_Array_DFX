@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 // rm_mul.v -- DFX RM `rm_mul` for partition `pd_t1`.
-// Port list is FROZEN -- must match the other RM exactly.
+// Port list is fixed -- must match the other RM exactly.
 //
 // y       = a * b, signed 16x16 -> 32, registered (one DSP48E1).
 // rm_id   = 8'hB2 once out of reset (from a dont_touch flop so no partition

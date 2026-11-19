@@ -1,8 +1,8 @@
 `timescale 1ns/1ps
-// rm_int16.v -- DFX RM `rm_int16` for partition `pd_t2` (T2_PLAN sec. 6.4).
+// rm_int16.v -- DFX RM `rm_int16` for partition `pd_t2`.
 // int16 lanes as-is -> T0 array/pe UNCHANGED (DATA_W 16, ACC_W 48, one
 // DSP48E1 per PE) -> sel readout with sat32 and a real ovf.
-// rm_id 16, LED badge 1111. Port list is FROZEN: byte-identical in all RMs.
+// rm_id 16, LED badge 1111. Port list is fixed: byte-identical in all RMs.
 // Files: rm_int16.v rtl/array.v rtl/pe.v rm_common.v (scripts/t2/t2_filesets.tcl).
 module rp_t2 #(
     parameter PRESCALE_W = 24                  // LED badge toggles every 2^PRESCALE_W cycles (~168 ms); benches override

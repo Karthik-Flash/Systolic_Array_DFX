@@ -1,4 +1,4 @@
-# ooc_check.tcl -- T1_PLAN §6.5: out-of-context synth of each RM -> LUT/FF/DSP sanity.
+# ooc_check.tcl -- out-of-context synth of each RM -> LUT/FF/DSP sanity.
 # Run from inside vivado/ so journals/logs land in the gitignored folder:
 #   cd vivado
 #   C:/Xilinx/Vivado/2022.2/bin/vivado.bat -mode batch -source ../scripts/t1/ooc_check.tcl

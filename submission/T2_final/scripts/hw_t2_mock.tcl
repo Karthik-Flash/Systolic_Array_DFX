@@ -1,6 +1,6 @@
-# hw_t2_mock.tcl -- run hw_t2.tcl against a simulated ZedBoard (docs/t2/T2_PLAN.md §11.2)
+# hw_t2_mock.tcl -- run hw_t2.tcl against a simulated ZedBoard
 #
-# Run from PowerShell (G28), in a scratch folder:
+# Run from PowerShell, in a scratch folder:
 #   mkdir D:\Projects\RC_Project\vivado\scratch_t2 ; cd D:\Projects\RC_Project\vivado\scratch_t2
 #   C:\Xilinx\Vivado\2022.2\bin\vivado.bat -mode batch -nojournal -nolog -source ..\..\scripts\t2\hw_t2_mock.tcl
 # Expect the last two lines:  MOCK TESTS PASS  /  NEGATIVE MOCKS OK (5/5 failed as required)
@@ -114,7 +114,7 @@ proc mock_read {names} {
     foreach n $names {
         switch -- $n {
             vio_result {
-                # if/else, not expr ?: -- expr turns a hex string like 00007E45 into the float 7e+45 (G19)
+                # if/else, not expr ?: -- expr turns a hex string like 00007E45 into the float 7e+45
                 if {$::MD(decouple)} { lappend out 00000000 } else { lappend out [t2_hex8 [lindex $::MD(C) $::MD(sel)]] }
             }
             vio_rm_id {

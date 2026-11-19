@@ -1,5 +1,5 @@
 `timescale 1ns/1ps
-// pe_lut.v -- T0 pe.v semantics in LUT fabric (T2_PLAN sec. 6.5, D3).
+// pe_lut.v -- T0 pe.v semantics in LUT fabric.
 // Same behaviour as rtl/pe.v: registered a/b relays (one cycle per hop),
 // acc <= clr_acc ? 0 : acc + a_in*b_in, synchronous active-low reset with
 // priority over clr_acc. Parameterised for int8 (ACC_W 18) and int4 (ACC_W 10):
@@ -20,7 +20,7 @@ module pe_lut #(
     output reg  signed [ACC_W-1:0]  acc
 );
 
-    // Explicit signed product so acc + prod sign-extends (T0 bug #1 care).
+    // Explicit signed product so acc + prod sign-extends.
     wire signed [2*DATA_W-1:0] prod;
     assign prod = a_in * b_in;
 

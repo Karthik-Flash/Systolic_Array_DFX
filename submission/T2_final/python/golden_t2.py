@@ -1,4 +1,4 @@
-"""T2 precision-aware golden model (T2_PLAN sec. 7).
+"""T2 precision-aware golden model.
 
 What every rp_t2 RM must reproduce bit for bit, for W in {16, 8, 4}:
   Aq, Bq = clamp_full(A16, W), clamp_full(B16, W)   (full two's-complement range)
@@ -79,7 +79,7 @@ def feed_lines(A16: np.ndarray, B16: np.ndarray) -> tuple[list[str], list[str]]:
 
 
 def write_case(out_dir, A16, B16, prec: str, case: str, seed) -> dict:
-    """Write every sec. 7.4 file for one (precision, case) into out_dir. Returns meta."""
+    """Write every vector file for one (precision, case) into out_dir. Returns meta."""
     import json
     from pathlib import Path
 

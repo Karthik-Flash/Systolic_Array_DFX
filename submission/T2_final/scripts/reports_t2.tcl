@@ -1,6 +1,6 @@
-# reports_t2.tcl -- per-configuration reports + pr_verify (docs/t2/T2_PLAN.md §10.2)
+# reports_t2.tcl -- per-configuration reports + pr_verify
 #
-# From PowerShell (G28), after collect_bitstreams.py passed:
+# From PowerShell, after collect_bitstreams.py passed:
 #   cd D:\Projects\RC_Project\vivado\scratch_t2
 #   C:\Xilinx\Vivado\2022.2\bin\vivado.bat -mode batch -nojournal -source ..\..\scripts\t2\reports_t2.tcl
 # Writes docs/t2/reports/cfg_<x>_*.rpt, pr_verify.rpt, build_summary.csv. Read-only on the project.

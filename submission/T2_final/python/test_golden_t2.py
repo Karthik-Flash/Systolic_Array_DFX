@@ -1,4 +1,4 @@
-"""Self-tests of the T2 golden model and the generated vectors (T2_PLAN sec. 7.6).
+"""Self-tests of the T2 golden model and the generated vectors.
 
 Run from the project root after gen_vectors_t2.py: python python/test_golden_t2.py
 Prints one line per check and ALL PASS; exits non-zero on any failure.
@@ -82,7 +82,7 @@ for bits in (4, 8, 10, 16, 18, 32, 48):
     vals = [lo, lo + 1, -1, 0, 1, hi - 1, hi]
     check(f"hex round trip @{bits}", [g.from_hex(g.to_hex(v, bits), bits) for v in vals] == vals)
 
-# 7. plan sec. 7.5 rows (from the generated files)
+# 7. hand-checked rows (from the generated files)
 cnt16 = [30, 70, 110, 150, 70, 174, 278, 382, 110, 278, 446, 614, 150, 382, 614, 846]
 cnt4 = [30, 66, 70, 70, 66, 159, 175, 175, 70, 175, 196, 196, 70, 175, 196, 196]
 check("counting int16", c_out("int16", "counting") == cnt16)

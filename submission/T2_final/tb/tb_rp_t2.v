@@ -4,7 +4,7 @@
 // vector directory; scripts/t2/run_sims.py chooses which RM's files to compile
 // (negative builds N1/N2 deliberately mismatch the two).
 // Run with the simulator's working directory = sim/t2_build/<build>/ (vector
-// paths are relative to it). Checks (T2_PLAN sec. 8.1):
+// paths are relative to it). Checks:
 //   reset values; rm_id after release; every case through the staircase the
 //   static feed register would drive; all 16 results + ovf via sel; results
 //   unchanged 20 cycles later; LED badge PAT <-> 0000 every 2^PW cycles.

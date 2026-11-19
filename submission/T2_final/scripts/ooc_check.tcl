@@ -1,10 +1,10 @@
-# ooc_check.tcl -- T2_PLAN sec. 8.3: out-of-context synthesis of each RM + resource/timing gates.
+# ooc_check.tcl -- out-of-context synthesis of each RM + resource/timing gates.
 # Run from vivado/scratch_t2/ so journals, logs and .Xil/ stay in the scratch folder:
 #   cd D:/Projects/RC_Project/vivado/scratch_t2
 #   C:/Xilinx/Vivado/2022.2/bin/vivado.bat -mode batch -source ../../scripts/t2/ooc_check.tcl
 # Writes docs/t2/reports/ooc_<rm>_utilization.rpt, ooc_<rm>_timing.rpt, ooc_summary.csv.
 # Gates: DSP 16/0/0, LUT <= 2200, BRAM 0, est. WNS > 0 (warn < +1.5 ns for int16/int8).
-# Counts are read from report_utilization text, never from PRIMITIVE_GROUP filters (T1 bug #3).
+# Counts are read from report_utilization text, never from PRIMITIVE_GROUP filters.
 
 source [file join [file dirname [info script]] t2_filesets.tcl]
 set root $::T2_ROOT

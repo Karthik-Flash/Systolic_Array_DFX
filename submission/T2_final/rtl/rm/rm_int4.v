@@ -1,9 +1,9 @@
 `timescale 1ns/1ps
-// rm_int4.v -- DFX RM `rm_int4` for partition `pd_t2` (T2_PLAN sec. 6.4).
+// rm_int4.v -- DFX RM `rm_int4` for partition `pd_t2`.
 // int16 lanes -> lane_sat to [-8, 7], registered -> array_lut of pe_lut
 // (DATA_W 4, ACC_W 10, LUT fabric, 0 DSP) -> sel readout, sign-extended to
 // int32 (ovf is a constant-0 dont_touch flop). rm_id 04, LED badge 0001.
-// Port list is FROZEN: byte-identical in all RMs.
+// Port list is fixed: byte-identical in all RMs.
 // Files: rm_int4.v array_lut.v pe_lut.v rm_common.v (scripts/t2/t2_filesets.tcl).
 module rp_t2 #(
     parameter PRESCALE_W = 24                  // LED badge toggles every 2^PRESCALE_W cycles (~168 ms); benches override

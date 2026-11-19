@@ -1,4 +1,4 @@
-# hw_t1.tcl -- T1_PLAN §9.3: Hardware Manager procs for the on-board DFX swap test.
+# hw_t1.tcl -- Hardware Manager procs for the on-board DFX swap test.
 # In the Vivado Tcl console:
 #   source D:/Projects/RC_Project/scripts/t1/hw_t1.tcl
 #   t1_connect ; t1_program full add ; t1_swap_demo mul ; ... ; t1_selftest
@@ -18,7 +18,7 @@ set t1_reports $t1_root/docs/t1/reports
 if {![info exists ::T1_MOCK]} { set ::T1_MOCK 0 }
 
 # VIO probe name patterns, tried in order (robust to hierarchy prefixes).
-# Calibration knob: if a lookup fails, run t1_probes and add the real name here.
+# If a lookup fails, run t1_probes and add the real name here.
 set t1_probe_pat {
     y        {*vio_y*}
     rm_id    {*vio_rm_id*}
@@ -29,7 +29,7 @@ set t1_probe_pat {
     b        {*vio_b*}
 }
 
-# T1_PLAN §6.1 -- keep identical to tb_rp_t1.v / tb_top_dfx.v. {a b add_y mul_y}
+# Test vectors -- keep identical to tb_rp_t1.v / tb_top_dfx.v. {a b add_y mul_y}
 set t1_vectors {
     {0003 0004 00000007 0000000C}
     {FFFD 0004 00000001 FFFFFFF4}
@@ -204,7 +204,7 @@ proc t1_swap {rm} {
     return $ms
 }
 
-# all §6.1 vectors + rm_id for the loaded RM; returns list of failures (empty = pass)
+# all test vectors + rm_id for the loaded RM; returns list of failures (empty = pass)
 proc t1_check {rm} {
     set fails {}
     set exp_id [dict get $::t1_rm_id $rm]

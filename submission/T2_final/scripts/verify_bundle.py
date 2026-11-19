@@ -6,7 +6,7 @@
 Checks: 9 files present; sizes and sha256 match manifest.csv; every .bit has a Xilinx header;
 4 fulls and 4 partials are each mutually distinct (catches a wrongly collected file);
 partial sizes equal, full sizes equal; the .ltx names all 11 vio_* probes; nothing is gitignored.
-Predictions P1/P2 (plan §12.1) are reported as held / not held but never fail the check.
+Predictions P1/P2 are reported as held / not held but never fail the check.
 Prints BUNDLE OK or BUNDLE FAIL and exits 0 / 1.
 """
 import csv, hashlib, subprocess, sys

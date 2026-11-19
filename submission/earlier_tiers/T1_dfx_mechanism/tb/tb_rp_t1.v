@@ -2,7 +2,7 @@
 // tb_rp_t1.v -- self-checking bench for one T1 RM (module rp_t1).
 // Compile once per RM:  -DRM_ADD with rtl/t1/rm/rm_add.v
 //                       -DRM_MUL with rtl/t1/rm/rm_mul.v
-// Checks reset values, rm_id after reset release, every T1_PLAN §6.1 vector
+// Checks reset values, rm_id after reset release, every test vector
 // (1-cycle output register), and >= 5 LED pattern steps. Prints PASS/FAIL.
 module tb_rp_t1;
 `ifdef RM_MUL
@@ -28,7 +28,7 @@ module tb_rp_t1;
 
     always #5 clk = ~clk;
 
-    // T1_PLAN §6.1 -- keep identical to tb_top_dfx.v and hw_t1.tcl.
+    // Test vectors -- keep identical to tb_top_dfx.v and hw_t1.tcl.
     // {a, b, rm_add y, rm_mul y}
     function [95:0] vec;
         input integer i;
@@ -90,7 +90,7 @@ module tb_rp_t1;
         @(posedge clk); #1;
         check("rm_id after release", rm_id, EXP_ID);
 
-        // ---- §6.1 vectors (1-cycle output register) ----
+        // ---- test vectors (1-cycle output register) ----
         for (i = 0; i < NVEC; i = i + 1) begin
             @(negedge clk) begin a = vec(i) >> 80; b = vec(i) >> 64; end
             @(posedge clk); #1;

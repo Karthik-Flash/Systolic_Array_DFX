@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""collect_bitstreams.py -- T2 run folders -> bitstreams/t2/ + manifest.csv (docs/t2/T2_PLAN.md §10.1)
+"""collect_bitstreams.py -- T2 run folders -> bitstreams/t2/ + manifest.csv
 
     python scripts/t2/collect_bitstreams.py --dry-run     # check only
     python scripts/t2/collect_bitstreams.py               # check, copy, write manifest

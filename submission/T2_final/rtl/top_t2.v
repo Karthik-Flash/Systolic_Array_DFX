@@ -5,7 +5,7 @@
 //   registered feed stage, start gating, done flag, decoupler, LED drivers.
 //   U_RP (module rp_t2) is the reconfigurable partition pd_t2:
 //     rm_int16 (id 16, DSP) | rm_int8 (id 08, LUT) | rm_int4 (id 04, LUT) | greybox.
-//   VIO (vio_t2), T2_PLAN sec. 4:
+//   VIO (vio_t2):
 //     out0 vio_decouple (1 = isolate RP outputs AND hold RM in reset)
 //     out1 vio_rm_rst, out2 vio_start (rising edge, gated), out3 vio_sel,
 //     out4 vio_a, out5 vio_b (A/B row-major int16, X[i][j] at [16(4i+j) +: 16])
@@ -30,7 +30,7 @@ module top_t2 #(
     uptime #(.TICK_DIV(TICK_DIV)) U_UP (
         .clk(clk), .rst_n(sys_rst_n), .seconds(uptime_s), .heartbeat(heartbeat));
 
-    // ---- VIO probe nets (names = .ltx probe names, G27) ----
+    // ---- VIO probe nets (names = .ltx probe names) ----
     wire         vio_decouple, vio_rm_rst, vio_start;
     wire [3:0]   vio_sel;
     wire [255:0] vio_a, vio_b;

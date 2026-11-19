@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 // rm_add.v -- DFX RM `rm_add` for partition `pd_t1`.
-// Port list is FROZEN -- must match the other RM exactly.
+// Port list is fixed -- must match the other RM exactly.
 //
 // y       = sext(a) + sext(b), registered (fabric carry chain, no DSP).
 // rm_id   = 8'hA1 once out of reset (from a dont_touch flop so no partition

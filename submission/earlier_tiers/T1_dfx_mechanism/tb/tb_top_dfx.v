@@ -30,7 +30,7 @@ module tb_top_dfx;
     wire [7:0]  vio_rm_id  = dut.U_VIO.probe_in1;
     wire [31:0] vio_uptime = dut.U_VIO.probe_in2;
 
-    // T1_PLAN §6.1 -- keep identical to tb_rp_t1.v and hw_t1.tcl.
+    // Test vectors -- keep identical to tb_rp_t1.v and hw_t1.tcl.
     // {a, b, rm_add y, rm_mul y}
     function [95:0] vec;
         input integer i;
@@ -107,7 +107,7 @@ module tb_top_dfx;
         // ---- 3. rm_id ----
         check("vio_rm_id", vio_rm_id, EXP_ID);
 
-        // ---- 2. §6.1 vectors through the VIO stub (exact latency LAT) ----
+        // ---- 2. test vectors through the VIO stub (exact latency LAT) ----
         for (i = 0; i < NVEC; i = i + 1) begin
             set_ab(vec(i) >> 80, vec(i) >> 64);
             wait_cycles(LAT);

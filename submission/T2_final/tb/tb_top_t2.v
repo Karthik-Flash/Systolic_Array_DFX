@@ -5,7 +5,7 @@
 // +define NEG_UNGATED (negative build N3) removes the start gate by force, so
 // every "gate:" check must fail.
 // Run with the simulator's working directory = sim/t2_build/<build>/.
-// T2_PLAN sec. 8.1 items 1-7. Prints CT_CYCLES / CYCLES per case and PASS/FAIL.
+// Prints CT_CYCLES / CYCLES per case and PASS/FAIL.
 module tb_top_t2;
 `ifdef PREC_INT16
     localparam [7:0]   EXP_ID  = 8'h16;
