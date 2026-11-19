@@ -34,4 +34,5 @@ sim/t2_build/
 docs/t2/VIDEO_SHOT_LIST.md
 
 !submission/**
-Video_Demo.mp4
+Video_Demo.mp4# Report source (the PDF is the submitted version)
+submission/*.docx
