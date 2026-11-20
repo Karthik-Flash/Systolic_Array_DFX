@@ -33,8 +33,10 @@ sim/t2_build/
 # Shot list for the demo video (kept locally for reference)
 docs/t2/VIDEO_SHOT_LIST.md
 
-!submission/**
+!submission_Grp1_P1/**
 Video_Demo.mp4# Report source (the PDF is the submitted version)
-submission/*.docx
+submission_Grp1_P1/*.docx
 # Demo video (kept locally, not part of the submission)
 Video_Demo.mp4
+# Submission zip (built from submission_Grp1_P1/)
+*.zip

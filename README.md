@@ -59,7 +59,7 @@ docs/t0/        T0 guide (+ img/)
 docs/t1/        T1 guide, results, original plan, board runbook, reports/, img/
 docs/t2/        T2 guide, plan, board runbook, reports/, img/
 docs/           PROJECT_DETAIL.md (whole project), DEMO.md (live demo script)
-submission/     course source package: T2_final/ (self-contained final project), earlier_tiers/ (T0, T1), README.txt
+submission_Grp1_P1/  course submission: report and slides (PDF), Source_Files/ (final T2 design), README.txt
 vivado/         Vivado projects (gitignored; regenerate from sources)
 ```
 
@@ -108,4 +108,4 @@ On the board: `source D:/Projects/RC_Project/scripts/t2/hw_t2.tcl`, then `t2_con
 - [T2 board runbook and session record](docs/t2/T2_BOARD_RUNBOOK.md)
 - [Project detail: the whole project, from scratch](docs/PROJECT_DETAIL.md)
 - [Demo guide and LED legend](docs/DEMO.md)
-- [Submission source package index](submission/README.txt) (`submission/T2_final/` is the final project; T0 and T1 are under `submission/earlier_tiers/`)
+- [Submission source package index](submission_Grp1_P1/README.txt) (report, slides and `submission_Grp1_P1/Source_Files/`)

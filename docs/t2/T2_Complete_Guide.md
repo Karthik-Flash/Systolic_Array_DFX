@@ -748,6 +748,6 @@ Host-side quantisation of real data, error against int16, a small real workload,
 | Evidence | `docs/t2/reports/*`, `bitstreams/t2/manifest.csv` |
 | Images | `docs/t2/img/rtl_schematic.png`, `Child_runs_impl.png`, `impl.png` |
 | Documents | `docs/t2/T2_PLAN.md`, `docs/t2/T2_BOARD_RUNBOOK.md`, `docs/DEMO.md`, `docs/PROJECT_DETAIL.md` |
-| Course source package | `submission/T2_final/` (self-contained copy of everything above that T2 needs), index in `submission/README.txt` |
+| Course source package | `submission_Grp1_P1/Source_Files/` (self-contained copy of everything above that T2 needs), index in `submission_Grp1_P1/README.txt` |
 
 *Sources: docs/t2/T2_PLAN.md, docs/t2/T2_BOARD_RUNBOOK.md, scripts/t2/*
